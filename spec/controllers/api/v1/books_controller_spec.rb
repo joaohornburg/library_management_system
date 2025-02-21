@@ -138,4 +138,33 @@ RSpec.describe Api::V1::BooksController, type: :controller do
       end
     end
   end
+
+  describe 'GET #show' do
+    shared_examples 'returns a book' do
+      it 'returns a book' do
+        book = Book.create! valid_attributes
+        get :show, params: { id: book.id }, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq(book.to_json)
+      end
+    end
+
+    context 'when user is a librarian' do
+      before { sign_in librarian }
+      it_behaves_like 'returns a book'
+    end
+
+    context 'when user is a member' do
+      before { sign_in member }
+      it_behaves_like 'returns a book'
+    end
+
+    context 'when user is not authenticated' do
+      it 'returns unauthorized' do
+        book = Book.create! valid_attributes
+        get :show, params: { id: book.id }, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
