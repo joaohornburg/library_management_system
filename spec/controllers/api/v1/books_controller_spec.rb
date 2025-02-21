@@ -167,4 +167,40 @@ RSpec.describe Api::V1::BooksController, type: :controller do
       end
     end
   end
+
+  describe 'GET #index' do
+    let!(:book1) do
+      Book.create!(title: 'Test Book', author: 'Test Author', isbn: 'a1234567890', total_copies: 1, genre: 'Test Genre')
+    end
+    let!(:book2) do
+      Book.create!(title: 'Test Book 2', author: 'Test Author 2', isbn: 'b1234567890', total_copies: 1,
+                   genre: 'Other Genre')
+    end
+    let!(:book3) do
+      Book.create!(title: 'Clean Code', author: 'Uncle Bob', isbn: 'c1234567890', total_copies: 1, genre: 'Programming')
+    end
+
+    context 'when user is authenticated' do
+      before { sign_in member }
+
+      it 'returns all books when no search params are provided' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).length).to eq(3)
+      end
+
+      it 'returns filtered books when search params are provided' do
+        get :index, params: { title: 'Test' }, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).length).to eq(2)
+      end
+    end
+
+    context 'when user is not authenticated' do
+      it 'returns unauthorized' do
+        get :index, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

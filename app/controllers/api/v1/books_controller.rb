@@ -6,7 +6,7 @@ module Api
       before_action :set_book, only: %i[show update destroy]
 
       def index
-        @books = Book.all
+        @books = Book.search(search_params)
         authorize @books
         render json: @books
       end
@@ -51,6 +51,10 @@ module Api
 
       def book_params
         params.require(:book).permit(:title, :author, :genre, :isbn, :total_copies)
+      end
+
+      def search_params
+        params.permit(:title, :author, :genre)
       end
     end
   end
