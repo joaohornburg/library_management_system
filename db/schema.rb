@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_250_221_165_013) do
+ActiveRecord::Schema[7.1].define(version: 20_250_221_182_224) do
   create_table 'books', force: :cascade do |t|
     t.string 'title'
     t.string 'author'
@@ -22,6 +22,20 @@ ActiveRecord::Schema[7.1].define(version: 20_250_221_165_013) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['isbn'], name: 'index_books_on_isbn', unique: true
+  end
+
+  create_table 'borrowings', force: :cascade do |t|
+    t.integer 'user_id', null: false
+    t.integer 'book_id', null: false
+    t.datetime 'borrowed_at'
+    t.datetime 'due_date'
+    t.datetime 'returned_at'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['book_id'], name: 'index_borrowings_on_book_id'
+    t.index %w[user_id book_id], name: 'index_borrowings_on_user_and_book_active', unique: true,
+                                 where: 'returned_at IS NULL'
+    t.index ['user_id'], name: 'index_borrowings_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -36,4 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 20_250_221_165_013) do
     t.index ['email'], name: 'index_users_on_email', unique: true
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
+
+  add_foreign_key 'borrowings', 'books'
+  add_foreign_key 'borrowings', 'users'
 end

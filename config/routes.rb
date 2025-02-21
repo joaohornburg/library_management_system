@@ -20,6 +20,12 @@ Rails.application.routes.draw do
       }, defaults: { format: :json }
 
       resources :books
+
+      resources :borrowings, only: [:create] do
+        member do
+          patch :return
+        end
+      end
     end
   end
 end

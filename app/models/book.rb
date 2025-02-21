@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Book < ApplicationRecord
+  has_many :borrowings, dependent: :destroy
+
   validates :title, presence: true
   validates :author, presence: true
   validates :isbn, uniqueness: true, allow_nil: false
