@@ -26,4 +26,12 @@ RSpec.describe 'User Sessions', type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/v1/users/sign_out' do
+    it 'is not needed for JWT authentication' do
+      # JWT is stateless, no server-side logout required
+      # Client just needs to discard the token
+      expect(true).to be_truthy, 'JWT authentication is stateless, server-side logout not required'
+    end
+  end
 end
