@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class DashboardsController < ApplicationController
+    class DashboardsController < Api::V1::BaseController
       before_action :authenticate_user!
 
       def show

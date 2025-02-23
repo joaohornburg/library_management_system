@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class BooksController < ApplicationController
+    class BooksController < Api::V1::BaseController
       before_action :set_book, only: %i[show update destroy]
 
       def index

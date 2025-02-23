@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class BorrowingsController < ApplicationController
+    class BorrowingsController < Api::V1::BaseController
       before_action :authenticate_user!
       before_action :set_borrowing, only: [:return]
 
