@@ -1,24 +1,24 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a simple library management system built with Ruby on Rails and React.
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+```
+bundle install
+rails db:migrate
+rails db:seed
+yarn install
+```
 
-* System dependencies
+## Run
 
-* Configuration
+```
+./bin/dev
+```
 
-* Database creation
+## Test
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+bundle exec rspec spec
+```
