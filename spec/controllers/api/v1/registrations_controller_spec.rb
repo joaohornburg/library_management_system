@@ -44,10 +44,12 @@ RSpec.describe Api::V1::RegistrationsController, type: :controller do
         expect(response).to have_http_status(:created)
       end
 
-      it "returns the created user's email in JSON" do
+      it "returns the created user's attributes in JSON" do
         post :create, params: valid_attributes, format: :json
         json_response = JSON.parse(response.body)
         expect(json_response['email']).to eq('test@example.com')
+        expect(json_response['role']).to eq('member')
+        expect(json_response['id']).to be_present
       end
 
       context 'when user is trying to sign up as a librarian' do

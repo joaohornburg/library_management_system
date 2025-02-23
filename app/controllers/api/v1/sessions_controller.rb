@@ -14,6 +14,9 @@ module Api
       # end
 
       # POST /resource/sign_in
+      def create
+        super
+      end
 
       # DELETE /resource/sign_out
       # def destroy
@@ -22,9 +25,10 @@ module Api
 
       protected
 
-      # We need to override this method because of the namespace of the API. Otherwise Devise will assume scope: :api_v1_user.
-      def auth_options
-        { scope: :user, recall: "#{controller_path}#new", locale: I18n.locale }
+      def respond_with(resource, _opts = {})
+        serialized_data = UserSerializer.render(resource) 
+        Rails.logger.debug("User logged in: #{serialized_data}")
+        render json: serialized_data, status: :created
       end
 
       # If you have extra params to permit, append them to the sanitizer.

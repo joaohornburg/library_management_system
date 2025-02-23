@@ -12,6 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      console.log('Login submitted with email:', email, 'and password:', password)
       const response = await fetch('/api/v1/users/sign_in', {
         method: 'POST',
         headers: {
@@ -28,12 +29,15 @@ const Login = () => {
       if (response.ok) {
         const token = response.headers.get('Authorization')
         const userData = await response.json()
+        console.log('Login successful, userData:', userData)
         login(token, userData)
         navigate('/dashboard')
       } else {
+        console.error('Login failed:', response.status)
         setError('Invalid email or password')
       }
     } catch (err) {
+      console.error('Login error:', err)
       setError('An error occurred. Please try again.')
     }
   }

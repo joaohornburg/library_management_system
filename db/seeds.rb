@@ -81,4 +81,33 @@ books_data.each do |book_data|
   end
 end
 
+member = User.find_by(email: 'member@example.com')
+
+Borrowing.find_or_create_by!(
+  user: member,
+  book: Book.find_by(title: 'Clean Architecture: A Craftsman\'s Guide to Software Structure and Design')
+) do |borrowing|
+  borrowing.borrowed_at = Date.today
+  borrowing.due_date = 2.weeks.from_now
+  puts "Created current borrowing for: #{borrowing.book.title}"
+end
+
+Borrowing.find_or_create_by!(
+  user: member, 
+  book: Book.find_by(title: 'Test Driven Development: By Example')
+) do |borrowing|
+  borrowing.borrowed_at = 2.weeks.ago
+  borrowing.due_date = Date.today
+  puts "Created due today borrowing for: #{borrowing.book.title}"
+end
+
+Borrowing.find_or_create_by!(
+  user: member,
+  book: Book.find_by(title: 'The Pragmatic Programmer: Your Journey to Mastery')
+) do |borrowing|
+  borrowing.borrowed_at = 4.weeks.ago
+  borrowing.due_date = 2.weeks.ago
+  puts "Created overdue borrowing for: #{borrowing.book.title}"
+end
+
 puts 'Seed completed successfully!'
