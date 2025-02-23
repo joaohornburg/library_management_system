@@ -30,6 +30,19 @@ module Api
         end
       end
 
+      def index
+        if current_user.librarian?
+          @borrowings = Borrowing.includes(:user, :book).all
+          borrowings_by_user = @borrowings.group_by { |b| b.user.email }.transform_values do |borrowings|
+            borrowings.map { |b| BorrowingSerializer.render(b) }
+          end
+          render json: borrowings_by_user
+        else
+          @borrowings = current_user.borrowings.includes(:book)
+          render json: @borrowings.map { |b| BorrowingSerializer.render(b) }
+        end
+      end
+
       private
 
       def set_borrowing

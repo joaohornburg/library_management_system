@@ -92,4 +92,66 @@ RSpec.describe Api::V1::BorrowingsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #index' do
+    let!(:borrowing) do
+      Borrowing.create!(
+        user: member,
+        book: book,
+        borrowed_at: Time.current,
+        due_date: 2.weeks.from_now
+      )
+    end
+
+    context 'when user is a librarian' do
+      before { sign_in librarian }
+
+      it 'returns all borrowings grouped by user' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        
+        json_response = JSON.parse(response.body)
+        expect(json_response).to have_key(member.email)
+        expect(json_response[member.email].first).to include(
+          'book_title' => book.title,
+          'user_email' => member.email
+        )
+      end
+    end
+
+    context 'when user is a member' do
+      before { sign_in member }
+
+      it 'returns only their borrowings' do
+        other_book = Book.create!(
+          title: 'Other Book',
+          author: 'Other Author',
+          isbn: '0987654321',
+          total_copies: 1
+        )
+        
+        other_user = User.create!(email: 'other@example.com', password: 'password', role: :member)
+        other_borrowing = Borrowing.create!(
+          user: other_user,
+          book: other_book,
+          borrowed_at: Time.current,
+          due_date: 2.weeks.from_now
+        )
+
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['book_title']).to eq(book.title)
+      end
+    end
+
+    context 'when user is not authenticated' do
+      it 'returns unauthorized' do
+        get :index, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

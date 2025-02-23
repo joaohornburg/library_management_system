@@ -8,12 +8,12 @@ module Api
       def index
         @books = Book.search(search_params)
         authorize @books
-        render json: @books
+        render json: @books.map { |book| BookSerializer.render(book, current_user) }
       end
 
       def show
         authorize @book
-        render json: @book
+        render json: BookSerializer.render(@book, current_user)
       end
 
       def create

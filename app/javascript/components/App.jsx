@@ -4,6 +4,7 @@ import Login from './auth/Login'
 import Register from './auth/Register'
 import Dashboard from './Dashboard'
 import Books from './books/Books'
+import Borrowings from './borrowings/Borrowings'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './auth/PrivateRoute'
 
@@ -24,6 +25,10 @@ const App = () => {
             <Route
               path="/books"
               element={<PrivateRoute element={<Books />} />}
+            />
+            <Route
+              path="/borrowings"
+              element={<PrivateRoute element={<Borrowings />} />}
             />
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>

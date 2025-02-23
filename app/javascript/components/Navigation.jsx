@@ -18,7 +18,7 @@ const Navigation = () => {
           <Link to="/books">Books</Link>
         </li>
         <li className={isActive('/borrowings')}>
-          <span>Borrowings</span>
+          <Link to="/borrowings">Borrowings</Link>
         </li>
       </ul>
     </nav>

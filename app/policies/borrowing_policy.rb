@@ -10,4 +10,8 @@ class BorrowingPolicy < ApplicationPolicy
   def return?
     user.librarian?
   end
+
+  def index?
+    true
+  end
 end

@@ -145,7 +145,16 @@ RSpec.describe Api::V1::BooksController, type: :controller do
         book = Book.create! valid_attributes
         get :show, params: { id: book.id }, format: :json
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq(book.to_json)
+        expect(JSON.parse(response.body)).to include(
+          'id' => book.id,
+          'title' => book.title,
+          'author' => book.author,
+          'genre' => book.genre,
+          'isbn' => book.isbn,
+          'total_copies' => book.total_copies,
+          'available_copies' => book.total_copies,
+          'available' => true
+        )
       end
     end
 

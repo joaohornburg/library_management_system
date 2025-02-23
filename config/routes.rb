@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
       resources :books
 
-      resources :borrowings, only: [:create] do
+      resources :borrowings, only: [:create, :index] do
         member do
           patch :return
         end
