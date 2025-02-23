@@ -1,7 +1,8 @@
 class Api::V1::BaseController < ActionController::API
   include Pundit::Authorization
-
   before_action :authenticate_user!
+  wrap_parameters format: [:json]
+
   respond_to :json
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

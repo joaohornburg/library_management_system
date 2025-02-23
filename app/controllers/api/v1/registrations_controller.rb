@@ -4,9 +4,8 @@ module Api
   module V1
     class RegistrationsController < Devise::RegistrationsController
       skip_before_action :authenticate_user!, only: [:create]
-      respond_to :json
 
-      before_action :configure_sign_up_params, only: [:create]
+      # before_action :configure_sign_up_params, only: [:create]
       # before_action :configure_account_update_params, only: [:update]
 
       # GET /resource/sign_up
@@ -15,9 +14,14 @@ module Api
       # end
 
       # POST /resource
-      # def create
-      #   super
-      # end
+      def create
+        Rails.logger.debug("Raw params: #{params.inspect}")
+        Rails.logger.debug "Manual permit: #{params.require(:user).permit(:email, :password, :password_confirmation)}"
+        Rails.logger.debug("Devise params: #{sign_up_params}")
+        sanitized = devise_parameter_sanitizer.sanitize(:sign_up)
+        Rails.logger.debug("Sanitized params: #{sanitized}")
+        super
+      end
 
       # GET /resource/edit
       # def edit
@@ -43,13 +47,26 @@ module Api
       #   super
       # end
 
-      # protected
+      protected
+
+      # Overriding to avoid issue with Devise::ParameterSanitizer - couldn't find the root cause of it.
+      def sign_up_params
+        # Explicitly ignoring param role, so that no user can register as a librarian.
+        params.require(:user).permit(:email, :password, :password_confirmation)
+      end
+
+      def respond_with(resource, _opts = {})
+        if resource.persisted?
+          render json: resource, status: :created
+        else
+          render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
 
       # If you have extra params to permit, append them to the sanitizer.
-      def configure_sign_up_params
-        # Explicitly ignoring param role, so that no user can register as a librarian.
-        devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation])
-      end
+      # def configure_sign_up_params
+      #   # devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation])
+      # end
 
       # If you have extra params to permit, append them to the sanitizer.
       # def configure_account_update_params
