@@ -54,7 +54,7 @@ module Api
       end
 
       def search_params
-        params.permit(:title, :author, :genre)
+        params.permit(:title, :author, :genre, :book)
       end
     end
   end

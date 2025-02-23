@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './auth/Login'
 import Register from './auth/Register'
 import Dashboard from './Dashboard'
+import Books from './books/Books'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './auth/PrivateRoute'
 
@@ -19,6 +20,10 @@ const App = () => {
             <Route
               path="/dashboard"
               element={<PrivateRoute element={<Dashboard />} />}
+            />
+            <Route
+              path="/books"
+              element={<PrivateRoute element={<Books />} />}
             />
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>

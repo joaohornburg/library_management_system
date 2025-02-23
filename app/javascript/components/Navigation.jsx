@@ -15,7 +15,7 @@ const Navigation = () => {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li className={isActive('/books')}>
-          <span>Books</span>
+          <Link to="/books">Books</Link>
         </li>
         <li className={isActive('/borrowings')}>
           <span>Borrowings</span>
