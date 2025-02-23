@@ -26,6 +26,8 @@ Rails.application.routes.draw do
           patch :return
         end
       end
+
+      resource :dashboard, only: [:show]
     end
   end
 end
