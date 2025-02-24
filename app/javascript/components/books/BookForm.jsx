@@ -26,58 +26,94 @@ const BookForm = ({ book, onSubmit }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Title:</label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
+    <form onSubmit={handleSubmit} className="p-4 bg-light rounded shadow-sm">
+      <div className="row g-3">
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="title" className="form-label">Title:</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="form-control"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="author" className="form-label">Author:</label>
+            <input
+              type="text"
+              id="author"
+              name="author"
+              className="form-control"
+              value={formData.author}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="genre" className="form-label">Genre:</label>
+            <input
+              type="text"
+              id="genre"
+              name="genre"
+              className="form-control"
+              value={formData.genre}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="isbn" className="form-label">ISBN:</label>
+            <input
+              type="text"
+              id="isbn"
+              name="isbn"
+              className="form-control"
+              value={formData.isbn}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="total_copies" className="form-label">Total Copies:</label>
+            <input
+              type="number"
+              id="total_copies"
+              name="total_copies"
+              className="form-control"
+              value={formData.total_copies}
+              onChange={handleChange}
+              min="0"
+              required
+            />
+          </div>
+        </div>
       </div>
-      <div>
-        <label>Author:</label>
-        <input
-          type="text"
-          name="author"
-          value={formData.author}
-          onChange={handleChange}
-          required
-        />
+
+      <div className="row mt-4">
+        <div className="col-12 text-end">
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+          >
+            {book ? 'Update Book' : 'Add Book'}
+          </button>
+        </div>
       </div>
-      <div>
-        <label>Genre:</label>
-        <input
-          type="text"
-          name="genre"
-          value={formData.genre}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <label>ISBN:</label>
-        <input
-          type="text"
-          name="isbn"
-          value={formData.isbn}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label>Total Copies:</label>
-        <input
-          type="number"
-          name="total_copies"
-          value={formData.total_copies}
-          onChange={handleChange}
-          min="0"
-          required
-        />
-      </div>
-      <button type="submit">{book ? 'Update Book' : 'Add Book'}</button>
     </form>
   )
 }

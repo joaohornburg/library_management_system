@@ -70,45 +70,61 @@ const BookList = ({ books, onBooksChange }) => {
   }
 
   return (
-    <div>
+    <div className="row">
       {books.map(book => (
-        <div key={book.id} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ccc' }}>
-          {editingBook?.id === book.id ? (
-            <BookForm book={book} onSubmit={handleUpdate} />
-          ) : (
-            <>
-              <h3>{book.title}</h3>
-              <p>Author: {book.author}</p>
-              <p>Genre: {book.genre}</p>
-              <p>ISBN: {book.isbn}</p>
-              <p>Total Copies: {book.total_copies}</p>
-              <p>Available Copies: {book.available_copies}</p>
-              
-              {currentUser?.role === 'librarian' ? (
-                <div>
-                  <button onClick={() => setEditingBook(book)}>Edit</button>
-                  <button onClick={() => handleDelete(book.id)}>Delete</button>
-                </div>
+        <div key={book.id} className="col-md-6 col-lg-4 mb-4">
+          <div className="card h-100">
+            <div className="card-body">
+              {editingBook?.id === book.id ? (
+                <BookForm book={book} onSubmit={handleUpdate} />
               ) : (
-                <div>
-                  {book.current_user_borrowing ? (
-                    <p style={{ color: '#4a5568' }}>
-                      Due: {new Date(book.current_user_borrowing.due_date).toLocaleDateString()}
-                    </p>
-                  ) : book.available ? (
-                    <button 
-                      onClick={() => handleBorrow(book.id)}
-                      style={{ backgroundColor: '#4CAF50', color: 'white', border: 'none', padding: '5px 10px' }}
-                    >
-                      Borrow
-                    </button>
+                <>
+                  <h5 className="card-title">{book.title}</h5>
+                  <p className="card-text">
+                    <strong>Author:</strong> {book.author}<br />
+                    <strong>Genre:</strong> {book.genre}<br />
+                    <strong>ISBN:</strong> {book.isbn}<br />
+                    <strong>Total Copies:</strong> {book.total_copies}<br />
+                    <strong>Available Copies:</strong> {book.available_copies}
+                  </p>
+                  
+                  {currentUser?.role === 'librarian' ? (
+                    <div className="btn-group">
+                      <button 
+                        onClick={() => setEditingBook(book)} 
+                        className="btn btn-outline-primary"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(book.id)} 
+                        className="btn btn-outline-danger"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   ) : (
-                    <span style={{ color: '#e53e3e' }}>Not Available</span>
+                    <div>
+                      {book.current_user_borrowing ? (
+                        <p className="text-muted">
+                          Due: {new Date(book.current_user_borrowing.due_date).toLocaleDateString()}
+                        </p>
+                      ) : book.available ? (
+                        <button 
+                          onClick={() => handleBorrow(book.id)}
+                          className="btn btn-success"
+                        >
+                          Borrow
+                        </button>
+                      ) : (
+                        <span className="text-danger">Not Available</span>
+                      )}
+                    </div>
                   )}
-                </div>
+                </>
               )}
-            </>
-          )}
+            </div>
+          </div>
         </div>
       ))}
     </div>

@@ -13,8 +13,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <div style={{ padding: '20px' }}>
-          <h1>Library Management System</h1>
+        <div className="container-fluid">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

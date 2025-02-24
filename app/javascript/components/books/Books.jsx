@@ -59,27 +59,39 @@ const Books = () => {
   }
 
   return (
-    <div>
-      <h2>Books</h2>
-      <SearchForm onSearch={handleSearch} />
+    <div className="container py-4">
+      <h2 className="mb-4">Books</h2>
+      <div className="row">
+        <div className="col-12 mb-4">
+          <SearchForm onSearch={handleSearch} />
+        </div>
+      </div>
       
       {isLibrarian && (
         <div className="librarian-controls">
           <button 
             onClick={() => setShowAddForm(!showAddForm)}
-            className="add-book-button"
+            className={`btn ${showAddForm ? 'btn-danger' : 'btn-primary'}`}
           >
             {showAddForm ? 'Cancel' : 'Add New Book'}
           </button>
-          {showAddForm && <BookForm onSubmit={handleAddBook} />}
+          {showAddForm && (
+            <div className="mt-3">
+              <BookForm onSubmit={handleAddBook} />
+            </div>
+          )}
         </div>
       )}
       
-      <BookList 
-        books={books} 
-        onBooksChange={() => fetchBooks(searchParams)}
-        isLibrarian={isLibrarian}
-      />
+      <div className="row">
+        <div className="col-12">
+          <BookList 
+            books={books} 
+            onBooksChange={() => fetchBooks(searchParams)}
+            isLibrarian={isLibrarian}
+          />
+        </div>
+      </div>
     </div>
   )
 }

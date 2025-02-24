@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from './contexts/AuthContext'
+import BorrowedBook from './borrowings/BorrowedBook'
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null)
@@ -13,7 +14,6 @@ const Dashboard = () => {
 
         if (response.ok) {
           const data = await response.json()
-          console.log(data)
           setDashboardData(data)
         } else {
           setError('Failed to fetch dashboard data')
@@ -30,66 +30,96 @@ const Dashboard = () => {
   if (!dashboardData) return <div>Loading...</div>
 
   return (
-    <div className="dashboard">
-      <h2>Welcome, {currentUser.email}</h2>
-      
+    <div className="dashboard container py-4">
       {isLibrarian ? (
         <div className="librarian-dashboard">
-          <div className="stats">
-            <div className="stat-box">
-              <h3>Total Books</h3>
-              <p>{dashboardData.total_books}</p>
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">Total Books</h3>
+                  <p className="display-4">{dashboardData.total_books}</p>
+                </div>
+              </div>
             </div>
-            <div className="stat-box">
-              <h3>Total Borrowed Books</h3>
-              <p>{dashboardData.total_borrowed_books}</p>
+            <div className="col-md-6">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">Total Borrowed Books</h3>
+                  <p className="display-4">{dashboardData.total_borrowed_books}</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="books-due">
-            <h3>Books Due Today</h3>
-            <ul>
-              {dashboardData.books_due_today.map((item, index) => (
-                <li key={index}>
-                  {item.book_title} - {item.user_email}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="row">
+            <div className="col-md-6 mb-4">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="h5 mb-0">Books Due Today</h3>
+                </div>
+                <div className="card-body">
+                  {dashboardData.books_due_today.map((borrowing, index) => (
+                    <BorrowedBook
+                      key={index}
+                      borrowing={{
+                        id: borrowing.id,
+                        book_title: borrowing.book_title,
+                        due_date: new Date().toISOString(),
+                        user_email: borrowing.user_email
+                      }}
+                      isLibrarian={true}
+                      showReturnButton={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
 
-          <div className="overdue-books">
-            <h3>Overdue Books</h3>
-            <ul>
-              {dashboardData.overdue_borrowings.map((item, index) => (
-                <li key={index}>
-                  {item.book_title} - {item.user_email} ({item.days_overdue} days overdue)
-                </li>
-              ))}
-            </ul>
+            <div className="col-md-6 mb-4">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="h5 mb-0">Overdue Books</h3>
+                </div>
+                <div className="card-body">
+                  {dashboardData.overdue_borrowings.map((borrowing, index) => (
+                    <BorrowedBook
+                      key={index}
+                      borrowing={{
+                        id: borrowing.id,
+                        book_title: borrowing.book_title,
+                        due_date: borrowing.due_date,
+                        user_email: borrowing.user_email,
+                        days_overdue: borrowing.days_overdue
+                      }}
+                      isLibrarian={true}
+                      showReturnButton={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
         <div className="member-dashboard">
-          <div className="current-borrowings">
-            <h3>Your Borrowed Books</h3>
-            <ul>
-              {dashboardData.current_borrowings.map((item, index) => (
-                <li key={index} className={item.overdue ? 'overdue' : ''}>
-                  {item.book_title} - Due: {new Date(item.due_date).toLocaleDateString()}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="overdue-books">
-            <h3>Overdue Books</h3>
-            <ul>
-              {dashboardData.overdue_borrowings.map((item, index) => (
-                <li key={index}>
-                  {item.book_title} - {item.days_overdue} days overdue
-                </li>
-              ))}
-            </ul>
+          <div className="row">
+            <div className="col-12">
+              <div className="card mb-4">
+                <div className="card-header">
+                  <h3 className="h5 mb-0">Your Borrowed Books</h3>
+                </div>
+                <div className="card-body">
+                  {dashboardData.current_borrowings.map((borrowing, index) => (
+                    <BorrowedBook
+                      key={index}
+                      borrowing={borrowing}
+                      isLibrarian={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

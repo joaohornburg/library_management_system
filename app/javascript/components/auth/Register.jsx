@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import AuthForm from './AuthForm'
 
 const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     try {
       console.log('Registering user...')
       const response = await fetch('users', {
@@ -41,44 +44,74 @@ const Register = () => {
       }
     } catch (err) {
       setError('An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div>
-      <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <AuthForm title="Register">
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
           <input
             type="email"
+            className="form-control"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
           <input
             type="password"
+            className="form-control"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
-        <div>
-          <label>Confirm Password:</label>
+        <div className="mb-3">
+          <label htmlFor="passwordConfirmation" className="form-label">
+            Confirm Password
+          </label>
           <input
             type="password"
+            className="form-control"
+            id="passwordConfirmation"
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
-        <button type="submit">Register</button>
+        <button 
+          type="submit" 
+          className="btn btn-primary w-100 mb-3"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Registering...
+            </>
+          ) : 'Register'}
+        </button>
+        <div className="text-center">
+          <Link to="/login">Already have an account? Login</Link>
+        </div>
       </form>
-    </div>
+    </AuthForm>
   )
 }
 
