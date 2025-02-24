@@ -31,6 +31,10 @@ module Api
         render json: serialized_data, status: :created
       end
 
+      def respond_to_on_destroy
+        render json: { message: "Logged out successfully." }, status: :ok
+      end
+
       # If you have extra params to permit, append them to the sanitizer.
       # def configure_sign_in_params
       #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])

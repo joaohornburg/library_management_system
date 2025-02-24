@@ -32,7 +32,7 @@ module Api
 
       def index
         if current_user.librarian?
-          @borrowings = Borrowing.includes(:user, :book).all
+          @borrowings = Borrowing.active.includes(:user, :book)
           borrowings_by_user = @borrowings.group_by { |b| b.user.email }.transform_values do |borrowings|
             borrowings.map { |b| BorrowingSerializer.render(b) }
           end

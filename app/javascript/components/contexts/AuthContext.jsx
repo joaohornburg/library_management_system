@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await fetch('/api/v1/users/sign_out', {
+      const response = await fetch('users/sign_out', {
         method: 'DELETE',
         headers: {
           Authorization: token,

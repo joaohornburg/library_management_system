@@ -57,6 +57,9 @@ module Api
 
       def respond_with(resource, _opts = {})
         if resource.persisted?
+          if (token = request.env['warden-jwt_auth.token'])
+            response.headers['Authorization'] = "Bearer #{token}"
+          end
           render json: UserSerializer.render(resource), status: :created
         else
           render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity

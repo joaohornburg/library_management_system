@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault()
     try {
       console.log('Login submitted with email:', email, 'and password:', password)
-      const response = await fetch('/api/v1/users/sign_in', {
+      const response = await fetch('users/sign_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

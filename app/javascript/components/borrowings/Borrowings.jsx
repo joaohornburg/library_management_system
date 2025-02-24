@@ -43,7 +43,7 @@ const Borrowings = () => {
   if (isLibrarian) {
     return (
       <div>
-        <h2>All Borrowings</h2>
+        <h2>All Active Borrowings</h2>
         {Object.entries(borrowings).map(([userEmail, userBorrowings]) => (
           <div key={userEmail} style={{ marginBottom: '20px' }}>
             <h3>User: {userEmail}</h3>

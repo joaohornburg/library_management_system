@@ -13,7 +13,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/v1/users', {
+      console.log('Registering user...')
+      const response = await fetch('users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +30,9 @@ const Register = () => {
 
       if (response.ok) {
         const token = response.headers.get('Authorization')
+        console.log('Token:', token)
         const userData = await response.json()
+        console.log('User data:', userData)
         login(token, userData)
         navigate('/dashboard')
       } else {
