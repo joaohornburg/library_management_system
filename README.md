@@ -35,3 +35,11 @@ bundle exec rspec spec
 - Once the backend was finished, I started on the frontend. I followed the same order as the backend, but I didn't TDD the frontend since I'm still new to React and this was more of a "putting pieces together" exercise.
 - The frontend implementation led to some additions to the backend, particularly in borrowings, due to new requirements that I discovered while working on the frontend. For example, including the availability of books and displaying the current user's status in the Books#index.
 - After this was done, I proceeded with testing.
+- After testing I realized that the frontend wasn't responsive and that the layout was not optimal. So I added Bootstrap to the project and refactored the frontend to be more responsive and user-friendly. I decided to use Bootstrap because of it's built-in grid system and because I'm familiar with it.
+
+### Future Improvements
+
+- Add pagination to the Books#index
+- Add tests for the frontend
+- Allow the librarian to group Borrowings by book as well as by user
+- Add a button for the librarian to lend a book to a user - I think this would be the standard use in a physical library. Or maybe when the user clicks the borrow button, that goes to a list which the librarian has to confirm.
